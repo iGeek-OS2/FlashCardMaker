@@ -13,10 +13,8 @@
 </head>
 <body class="bg-gradient-flow text-white min-h-screen flex flex-col p-4">
 
-    <!-- 全体のコンテナ -->
     <div id="app-container" class="w-full flex-grow flex flex-col">
 
-        <!-- ヘッダーとナビゲーション -->
         <header class="flex justify-between items-center mb-4 flex-shrink-0">
             <h1 class="text-2xl md:text-3xl font-black flex items-center gap-3">
                 <i class="fas fa-sparkles text-cyan-300"></i>
@@ -27,16 +25,13 @@
             </nav>
         </header>
 
-        <!-- メインコンテンツエリア -->
         <main id="main-content" class="w-full flex-grow flex items-center justify-center">
-            <!-- 初期画面 -->
             <div id="initial-view" class="w-full max-w-lg md:max-w-2xl">
                 <div class="glassmorphism rounded-3xl p-6 md:p-8 shadow-2xl text-center">
                      <h2 class="text-xl md:text-2xl font-black mb-2">PDFからAIで暗記カードを自動生成</h2>
                     <p class="text-sm md:text-base text-white/80 mb-8">3ステップで、学習を始めよう。</p>
                     
                     <div class="space-y-6 text-left">
-                        <!-- Step 1: PDF Upload -->
                         <div>
                             <label class="font-bold text-base mb-2 flex items-center"><span class="bg-cyan-500 text-white rounded-full h-6 w-6 flex items-center justify-center mr-3 font-bold text-xs">1</span>PDFをアップロード</label>
                             <div id="upload-area" class="w-full glassmorphism text-center p-[24px] rounded-xl transition hover:bg-white/20 border-2 border-dashed border-white/30 cursor-pointer">
@@ -49,7 +44,6 @@
                             <input type="file" id="pdf-input" accept=".pdf" class="hidden" multiple>
                         </div>
                         
-                        <!-- Step 2: Card Count Selection -->
                         <div>
                            <label class="font-bold text-base mb-2 flex items-center"><span class="bg-purple-500 text-white rounded-full h-6 w-6 flex items-center justify-center mr-3 font-bold text-xs">2</span>生成する枚数を選択</label>
                            <div id="card-count-dropdown" class="relative w-full">
@@ -66,7 +60,6 @@
                             </div>
                         </div>
 
-                        <!-- Step 3: Generate -->
                         <div>
                              <label class="font-bold text-base mb-2 flex items-center"><span class="bg-pink-500 text-white rounded-full h-6 w-6 flex items-center justify-center mr-3 font-bold text-xs">3</span>生成を開始</label>
                             <button id="generate-cards-btn" class="w-full bg-purple-600 hover:bg-purple-700 font-bold py-3 px-4 rounded-xl text-base transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
@@ -85,7 +78,6 @@
                 </div>
             </div>
 
-            <!-- フラッシュカード画面 -->
             <div id="flashcard-view" class="hidden w-full">
                 <div class="max-w-lg md:max-w-2xl mx-auto">
                     <div class="text-center mb-4">
@@ -109,7 +101,6 @@
                         <button id="correct-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-base md:text-lg transition shadow-lg transform hover:scale-105"><i class="fas fa-check mr-2"></i>正解</button>
                     </div>
                 </div>
-                <!-- Floating AI Button -->
                 <div class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-20 flex flex-col items-center">
                     <button id="ai-explain-btn" class="bg-blue-600 hover:bg-blue-700 h-14 w-14 rounded-full flex items-center justify-center shadow-2xl transition transform hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed">
                        <span id="explain-btn-icon"><i class="fa-solid fa-brain text-2xl"></i></span>
@@ -119,13 +110,11 @@
                 </div>
             </div>
             
-            <!-- 結果画面 -->
             <div id="finished-view" class="hidden w-full max-w-lg md:max-w-2xl mx-auto">
                  <div class="glassmorphism rounded-3xl p-8 shadow-2xl text-center">
                     <h2 class="text-2xl md:text-3xl font-black mb-2">お疲れ様でした！</h2>
                     <p class="text-base md:text-lg text-white/80 mb-8">今回の学習結果です。</p>
                     <div class="flex justify-center gap-8 md:gap-16 mb-8">
-                        <!-- 正解 -->
                         <div class="flex flex-col items-center">
                             <div class="relative w-24 h-24 md:w-32 md:h-32">
                                 <svg class="w-full h-full" viewBox="0 0 100 100">
@@ -136,8 +125,7 @@
                             </div>
                             <p class="mt-4 text-base md:text-xl font-semibold">正解</p>
                         </div>
-                        <!-- 不正解 -->
-                         <div class="flex flex-col items-center">
+                        <div class="flex flex-col items-center">
                             <div class="relative w-24 h-24 md:w-32 md:h-32">
                                 <svg class="w-full h-full" viewBox="0 0 100 100">
                                     <circle class="text-red-500/20" stroke-width="10" stroke="currentColor" fill="transparent" r="45" cx="50" cy="50" />
@@ -162,8 +150,7 @@
                  </div>
             </div>
 
-             <!-- エラー表示 -->
-            <div id="error-view" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl text-center">
+             <div id="error-view" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl text-center">
                 <i class="fas fa-exclamation-triangle text-5xl text-red-400 mb-4"></i>
                 <h2 class="text-xl font-bold text-red-400 mb-2">エラーが発生しました</h2>
                 <p id="error-message" class="text-white/80 mb-6"></p>
@@ -172,9 +159,7 @@
         </main>
     </div>
 
-    <!-- モーダルウィンドウ -->
     <div id="modal-overlay" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
-        <!-- 使い方モーダル -->
         <div id="help-modal" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl w-full max-w-2xl relative">
             <button class="close-modal-btn absolute top-4 right-4 text-white/50 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
             <h2 class="text-2xl font-black mb-6"><i class="fas fa-lightbulb mr-3"></i>使い方</h2>
@@ -194,7 +179,6 @@
             </div>
         </div>
         
-        <!-- AI解説モーダル -->
         <div id="explanation-modal" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl w-full max-w-2xl relative">
             <button class="close-modal-btn absolute top-4 right-4 text-white/50 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
             <h2 class="text-2xl font-black mb-2 flex items-center gap-3"><i class="fa-solid fa-brain text-blue-300"></i>AIによる解説</h2>
@@ -203,10 +187,16 @@
         </div>
     </div>
     
+    <footer class="text-center p-4 mt-auto flex-shrink-0">
+        <p class="text-xs text-white/60">
+            <strong>免責事項:</strong> 本サービスは、個人の学習目的での利用（私的利用）を想定しています。<br>
+            アップロードするファイル（PDF等）の著作権については、利用者自身の責任でご確認ください。<br>
+            利用者がアップロードしたコンテンツに起因するいかなる著作権侵害や紛争についても、本サービスの開発者は一切の責任を負いません。
+        </p>
+    </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="script.js"></script>
 
 </body>
 </html>
-
