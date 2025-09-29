@@ -30,7 +30,7 @@
         <!-- メインコンテンツエリア -->
         <main id="main-content" class="w-full flex-grow flex items-center justify-center">
             <!-- 初期画面 -->
-            <div id="initial-view" class="w-full max-w-lg">
+            <div id="initial-view" class="w-full max-w-lg md:max-w-2xl">
                 <div class="glassmorphism rounded-3xl p-6 md:p-8 shadow-2xl text-center">
                      <h2 class="text-xl md:text-2xl font-black mb-2">PDFからAIで暗記カードを自動生成</h2>
                     <p class="text-sm md:text-base text-white/80 mb-8">3ステップで、学習を始めよう。</p>
@@ -87,7 +87,7 @@
 
             <!-- フラッシュカード画面 -->
             <div id="flashcard-view" class="hidden w-full">
-                <div class="max-w-lg mx-auto">
+                <div class="max-w-lg md:max-w-2xl mx-auto">
                     <div class="text-center mb-4">
                         <p id="card-progress" class="font-bold text-lg md:text-xl"></p>
                         <div class="w-full bg-white/20 rounded-full h-2.5 mt-2">
@@ -95,7 +95,7 @@
                         </div>
                     </div>
 
-                    <div class="card-container w-full h-56 sm:h-64" id="card-flipper">
+                    <div class="card-container w-full aspect-[2/1]" id="card-flipper">
                         <div class="card-inner">
                             <div id="card-front" class="card-front bg-white/90 text-gray-900 shadow-2xl text-base md:text-lg font-semibold"></div>
                             <div id="card-back" class="card-back bg-gray-800/90 text-white shadow-2xl text-base md:text-lg font-semibold"></div>
@@ -120,7 +120,7 @@
             </div>
             
             <!-- 結果画面 -->
-            <div id="finished-view" class="hidden w-full max-w-lg mx-auto">
+            <div id="finished-view" class="hidden w-full max-w-lg md:max-w-2xl mx-auto">
                  <div class="glassmorphism rounded-3xl p-8 shadow-2xl text-center">
                     <h2 class="text-2xl md:text-3xl font-black mb-2">お疲れ様でした！</h2>
                     <p class="text-base md:text-lg text-white/80 mb-8">今回の学習結果です。</p>
@@ -209,3 +209,4 @@
 
 </body>
 </html>
+
