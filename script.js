@@ -1,9 +1,7 @@
-// pdf.jsのワーカーを設定
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 重要：ここにCloudflare WorkerのURLを設定してください ---
-    // READMEの手順5で取得したURLを貼り付けます。例：'https://flashmaker-proxy.your-account.workers.dev'
+   
     const PROXY_SERVER_URL = 'https://flashmaker-api-proxy.dfg147147147.workers.dev'; // 必ずご自身のURLに書き換えてください
 
     // --- 状態管理 ---
