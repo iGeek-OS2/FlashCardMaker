@@ -24,7 +24,6 @@
             </h1>
             <nav>
                 <button id="help-btn" class="px-3 py-2 text-sm md:text-base rounded-lg hover:bg-white/20 transition"><i class="fas fa-lightbulb mr-2"></i>使い方</button>
-                <button id="settings-btn" class="px-3 py-2 text-sm md:text-base rounded-lg hover:bg-white/20 transition"><i class="fas fa-gear mr-2"></i>設定</button>
             </nav>
         </header>
 
@@ -33,18 +32,18 @@
             <!-- 初期画面 -->
             <div id="initial-view" class="w-full max-w-lg">
                 <div class="glassmorphism rounded-3xl p-6 md:p-8 shadow-2xl text-center">
-                     <h2 class="text-2xl md:text-3xl font-black mb-2">PDFからAIで暗記カードを自動生成</h2>
+                     <h2 class="text-xl md:text-2xl font-black mb-2">PDFからAIで暗記カードを自動生成</h2>
                     <p class="text-sm md:text-base text-white/80 mb-8">3ステップで、学習を始めよう。</p>
                     
                     <div class="space-y-6 text-left">
                         <!-- Step 1: PDF Upload -->
                         <div>
                             <label class="font-bold text-base mb-2 flex items-center"><span class="bg-cyan-500 text-white rounded-full h-6 w-6 flex items-center justify-center mr-3 font-bold text-xs">1</span>PDFをアップロード</label>
-                            <div id="upload-area" class="w-full glassmorphism text-center p-4 md:p-6 rounded-xl transition hover:bg-white/20 border-2 border-dashed border-white/30 cursor-pointer">
+                            <div id="upload-area" class="w-full glassmorphism text-center p-[24px] rounded-xl transition hover:bg-white/20 border-2 border-dashed border-white/30 cursor-pointer">
                                 <div class="flex flex-col items-center justify-center">
-                                    <i class="fas fa-file-pdf text-2xl md:text-3xl text-cyan-300 mb-2"></i>
-                                    <p id="upload-text" class="font-semibold text-sm md:text-base">クリックしてファイルを選択</p>
-                                    <p id="pdf-status" class="text-xs md:text-sm text-white/70 h-5"></p>
+                                    <i class="fas fa-file-pdf text-[36px] text-cyan-300 mb-[12px]"></i>
+                                    <p id="upload-text" class="font-semibold text-[16px]">クリックしてファイルを選択</p>
+                                    <p id="pdf-status" class="text-[12px] text-white/70 h-[20px] mt-[4px]"></p>
                                 </div>
                             </div>
                             <input type="file" id="pdf-input" accept=".pdf" class="hidden" multiple>
@@ -123,7 +122,7 @@
             <!-- 結果画面 -->
             <div id="finished-view" class="hidden w-full max-w-lg mx-auto">
                  <div class="glassmorphism rounded-3xl p-8 shadow-2xl text-center">
-                    <h2 class="text-3xl md:text-4xl font-black mb-2">お疲れ様でした！</h2>
+                    <h2 class="text-2xl md:text-3xl font-black mb-2">お疲れ様でした！</h2>
                     <p class="text-base md:text-lg text-white/80 mb-8">今回の学習結果です。</p>
                     <div class="flex justify-center gap-8 md:gap-16 mb-8">
                         <!-- 正解 -->
@@ -166,7 +165,7 @@
              <!-- エラー表示 -->
             <div id="error-view" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl text-center">
                 <i class="fas fa-exclamation-triangle text-5xl text-red-400 mb-4"></i>
-                <h2 class="text-2xl font-bold text-red-400 mb-2">エラーが発生しました</h2>
+                <h2 class="text-xl font-bold text-red-400 mb-2">エラーが発生しました</h2>
                 <p id="error-message" class="text-white/80 mb-6"></p>
                 <button id="error-back-btn" class="bg-white/20 hover:bg-white/30 font-bold py-3 px-6 rounded-xl transition">タイトルに戻る</button>
             </div>
@@ -175,42 +174,21 @@
 
     <!-- モーダルウィンドウ -->
     <div id="modal-overlay" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
-        <!-- 設定モーダル -->
-        <div id="settings-modal" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl w-full max-w-md relative">
-            <button class="close-modal-btn absolute top-4 right-4 text-white/50 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
-            <h2 class="text-3xl font-black mb-6"><i class="fas fa-gear mr-3"></i>設定</h2>
-            <div class="space-y-4">
-                <div>
-                    <label for="api-key-input" class="block font-semibold mb-1">OpenRouter APIキー</label>
-                    <input type="password" id="api-key-input" class="w-full bg-white/10 border border-white/20 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-purple-400" placeholder="sk-or-...">
-                    <p class="text-xs text-white/60 mt-1">APIキーはブラウザのローカルストレージに保存されます。</p>
-                </div>
-            </div>
-            <button id="save-settings-btn" class="w-full mt-8 bg-purple-600 hover:bg-purple-700 font-bold py-3 px-4 rounded-xl transition shadow-lg">
-                <span id="save-settings-text">保存する</span>
-                <span id="save-settings-success" class="hidden">保存しました！</span>
-            </button>
-        </div>
-
         <!-- 使い方モーダル -->
         <div id="help-modal" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl w-full max-w-2xl relative">
             <button class="close-modal-btn absolute top-4 right-4 text-white/50 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
-            <h2 class="text-3xl font-black mb-6"><i class="fas fa-lightbulb mr-3"></i>使い方</h2>
+            <h2 class="text-2xl font-black mb-6"><i class="fas fa-lightbulb mr-3"></i>使い方</h2>
             <div class="text-left space-y-4 text-white/90">
                 <div>
-                    <h3 class="font-bold text-lg"><span class="text-cyan-300">1.</span> APIキーの設定</h3>
-                    <p>右上の「設定」から、お使いのOpenRouter APIキーを設定してください。キーは安全にブラウザ内に保存されます。</p>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg"><span class="text-cyan-300">2.</span> PDFをアップロード</h3>
+                    <h3 class="font-bold text-lg"><span class="text-cyan-300">1.</span> PDFをアップロード</h3>
                     <p>「PDFを選択」ボタンから、暗記カードにしたいファイルを選びます。複数選択も可能です。</p>
                 </div>
                 <div>
-                    <h3 class="font-bold text-lg"><span class="text-cyan-300">3.</span> 暗記カードを生成</h3>
+                    <h3 class="font-bold text-lg"><span class="text-cyan-300">2.</span> 暗記カードを生成</h3>
                     <p>生成したいカードの枚数を選び、「生成開始」ボタンを押してください。AIがPDFの内容を解析し、自動でカードを作成します。</p>
                 </div>
                  <div>
-                    <h3 class="font-bold text-lg"><span class="text-cyan-300">4.</span> 学習開始</h3>
+                    <h3 class="font-bold text-lg"><span class="text-cyan-300">3.</span> 学習開始</h3>
                     <p>生成されたカードが表示されます。カードをタップすると答えが見れます。「正解」「不正解」で進めていきましょう。右下のフローティングボタンを押すとAIが詳しい解説をしてくれます。</p>
                 </div>
             </div>
@@ -219,7 +197,7 @@
         <!-- AI解説モーダル -->
         <div id="explanation-modal" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl w-full max-w-2xl relative">
             <button class="close-modal-btn absolute top-4 right-4 text-white/50 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
-            <h2 class="text-3xl font-black mb-2 flex items-center gap-3"><i class="fa-solid fa-brain text-blue-300"></i>AIによる解説</h2>
+            <h2 class="text-2xl font-black mb-2 flex items-center gap-3"><i class="fa-solid fa-brain text-blue-300"></i>AIによる解説</h2>
             <p id="explanation-question" class="font-bold text-lg text-white/80 mb-4 border-b border-white/20 pb-2"></p>
             <div id="explanation-content" class="text-left text-white/90 max-h-80 overflow-y-auto custom-scrollbar pr-4"></div>
         </div>
@@ -231,4 +209,3 @@
 
 </body>
 </html>
-
