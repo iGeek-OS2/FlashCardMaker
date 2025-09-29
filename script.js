@@ -477,3 +477,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- アプリケーション開始 ---
     init();
 });
+
