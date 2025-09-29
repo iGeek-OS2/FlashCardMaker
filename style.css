@@ -65,7 +65,7 @@ body {
 }
 /* Markdown content styling */
 #explanation-content h2 {
-    font-size: 1.25rem;
+    font-size: 1.125rem; /* 1.25remから変更 */
     font-weight: 700;
     margin-bottom: 0.75rem;
     padding-bottom: 0.5rem;
@@ -90,4 +90,3 @@ body {
 #dropdown-options {
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
-
