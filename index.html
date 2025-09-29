@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashMaker Web</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-flow text-white min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- 全体のコンテナ -->
+    <div id="app-container" class="w-full max-w-4xl mx-auto">
+
+        <!-- ヘッダーとナビゲーション -->
+        <header class="flex justify-between items-center mb-4">
+            <h1 class="text-3xl font-black flex items-center gap-3">
+                <i class="fas fa-sparkles text-cyan-300"></i>
+                <span>FlashMaker Web</span>
+            </h1>
+            <nav>
+                <button id="help-btn" class="px-4 py-2 rounded-lg hover:bg-white/20 transition"><i class="fas fa-lightbulb mr-2"></i>使い方</button>
+                <button id="settings-btn" class="px-4 py-2 rounded-lg hover:bg-white/20 transition"><i class="fas fa-gear mr-2"></i>設定</button>
+            </nav>
+        </header>
+
+        <!-- メインコンテンツエリア -->
+        <main id="main-content" class="w-full">
+            <!-- 初期画面 -->
+            <div id="initial-view">
+                <div class="glassmorphism rounded-3xl p-8 shadow-2xl">
+                    <p class="text-center text-lg text-white/80 mb-6">PDFからAIで暗記カードを自動生成します。</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- PDFアップロード -->
+                        <div class="flex flex-col items-center justify-center p-6 border-2 border-dashed border-white/30 rounded-2xl">
+                            <i class="fas fa-file-pdf text-5xl text-cyan-300 mb-4"></i>
+                            <h2 class="font-bold text-xl mb-2">1. PDFをアップロード</h2>
+                            <p class="text-sm text-white/70 mb-4 text-center">暗記カードにしたいPDFファイルを選択してください。</p>
+                            <button id="upload-pdf-btn" class="w-full bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-4 rounded-xl transition shadow-lg">
+                                <i class="fas fa-upload mr-2"></i>PDFを選択
+                            </button>
+                            <input type="file" id="pdf-input" accept=".pdf" class="hidden" multiple>
+                             <p id="pdf-status" class="mt-3 text-sm text-center h-5"></p>
+                        </div>
+                        <!-- カード生成 -->
+                        <div class="flex flex-col items-center justify-center p-6 border-2 border-dashed border-white/30 rounded-2xl">
+                            <i class="fas fa-wand-magic-sparkles text-5xl text-purple-300 mb-4"></i>
+                            <h2 class="font-bold text-xl mb-2">2. 暗記カードを生成</h2>
+                            <div class="w-full mb-4">
+                                <label class="block text-sm text-white/70 mb-2">生成する枚数</label>
+                                <div id="card-count-options" class="grid grid-cols-4 gap-2">
+                                    <button class="card-count-btn bg-white/10 hover:bg-white/20 py-2 rounded-lg transition" data-count="10">10枚</button>
+                                    <button class="card-count-btn py-2 rounded-lg transition selected" data-count="20">20枚</button>
+                                    <button class="card-count-btn bg-white/10 hover:bg-white/20 py-2 rounded-lg transition" data-count="30">30枚</button>
+                                    <button class="card-count-btn bg-white/10 hover:bg-white/20 py-2 rounded-lg transition" data-count="40">40枚</button>
+                                </div>
+                            </div>
+                            <button id="generate-cards-btn" class="w-full bg-purple-600 hover:bg-purple-700 font-bold py-3 px-4 rounded-xl transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                <span id="generate-btn-text"><i class="fas fa-play mr-2"></i>生成開始</span>
+                                <span id="generate-spinner" class="hidden"><i class="fas fa-spinner fa-spin mr-2"></i>生成中...</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="text-center mt-6">
+                        <button id="import-json-btn" class="text-sm text-white/70 hover:text-white underline">
+                            <i class="fas fa-download mr-1"></i>既存のカードデータ (.json) を読み込む
+                        </button>
+                        <input type="file" id="json-input" accept=".json" class="hidden">
+                    </div>
+                </div>
+            </div>
+
+            <!-- フラッシュカード画面 -->
+            <div id="flashcard-view" class="hidden">
+                <div class="text-center mb-4">
+                    <p id="card-progress" class="font-bold text-xl"></p>
+                    <div class="w-full bg-white/20 rounded-full h-2.5 mt-2">
+                        <div id="progress-bar" class="bg-cyan-400 h-2.5 rounded-full transition-all duration-300"></div>
+                    </div>
+                </div>
+
+                <div class="card-container w-full max-w-lg mx-auto h-64" id="card-flipper">
+                    <div class="card-inner">
+                        <div id="card-front" class="card-front bg-white/90 text-gray-900 shadow-2xl"></div>
+                        <div id="card-back" class="card-back bg-gray-800/90 text-white shadow-2xl"></div>
+                    </div>
+                </div>
+                
+                <p class="text-center mt-4 text-sm text-white/70">カードをタップして答えを確認</p>
+
+                <div id="answer-buttons" class="hidden flex justify-center gap-4 mt-6">
+                    <button id="incorrect-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-full text-lg transition shadow-lg transform hover:scale-105"><i class="fas fa-times mr-2"></i>不正解</button>
+                    <button id="correct-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-lg transition shadow-lg transform hover:scale-105"><i class="fas fa-check mr-2"></i>正解</button>
+                </div>
+
+                <!-- Floating AI Button -->
+                <div class="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-20 flex flex-col items-center">
+                    <button id="ai-explain-btn" class="bg-blue-600 hover:bg-blue-700 h-16 w-16 rounded-full flex items-center justify-center shadow-2xl transition transform hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed">
+                       <span id="explain-btn-icon"><i class="fa-solid fa-brain text-3xl"></i></span>
+                       <span id="explain-spinner" class="hidden"><i class="fas fa-spinner fa-spin text-3xl"></i></span>
+                    </button>
+                     <p class="text-xs text-center mt-2 bg-black/30 px-2 py-1 rounded">AI解説</p>
+                </div>
+            </div>
+            
+            <!-- 結果画面 -->
+            <div id="finished-view" class="hidden">
+                 <div class="glassmorphism rounded-3xl p-8 shadow-2xl text-center">
+                    <h2 class="text-4xl font-black mb-2">お疲れ様でした！</h2>
+                    <p class="text-lg text-white/80 mb-8">今回の学習結果です。</p>
+                    <div class="flex justify-center gap-8 md:gap-16 mb-8">
+                        <!-- 正解 -->
+                        <div class="flex flex-col items-center">
+                            <div class="relative w-32 h-32">
+                                <svg class="w-full h-full" viewBox="0 0 100 100">
+                                    <circle class="text-green-500/20" stroke-width="10" stroke="currentColor" fill="transparent" r="45" cx="50" cy="50" />
+                                    <circle id="correct-circle" class="text-green-500 transition-all duration-1000" stroke-width="10" stroke-linecap="round" stroke="currentColor" fill="transparent" r="45" cx="50" cy="50" style="stroke-dasharray: 283; stroke-dashoffset: 283; transform: rotate(-90deg); transform-origin: 50% 50%;" />
+                                </svg>
+                                <span id="correct-count" class="absolute inset-0 flex items-center justify-center text-3xl font-bold"></span>
+                            </div>
+                            <p class="mt-4 text-xl font-semibold">正解</p>
+                        </div>
+                        <!-- 不正解 -->
+                         <div class="flex flex-col items-center">
+                            <div class="relative w-32 h-32">
+                                <svg class="w-full h-full" viewBox="0 0 100 100">
+                                    <circle class="text-red-500/20" stroke-width="10" stroke="currentColor" fill="transparent" r="45" cx="50" cy="50" />
+                                    <circle id="incorrect-circle" class="text-red-500 transition-all duration-1000" stroke-width="10" stroke-linecap="round" stroke="currentColor" fill="transparent" r="45" cx="50" cy="50" style="stroke-dasharray: 283; stroke-dashoffset: 283; transform: rotate(-90deg); transform-origin: 50% 50%;" />
+                                </svg>
+                                <span id="incorrect-count" class="absolute inset-0 flex items-center justify-center text-3xl font-bold"></span>
+                            </div>
+                            <p class="mt-4 text-xl font-semibold">不正解</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col md:flex-row justify-center gap-4">
+                        <button id="restart-btn" class="bg-cyan-500 hover:bg-cyan-600 font-bold py-3 px-6 rounded-xl transition shadow-lg"><i class="fas fa-redo mr-2"></i>もう一度挑戦</button>
+                        <button id="back-to-title-btn" class="bg-white/20 hover:bg-white/30 font-bold py-3 px-6 rounded-xl transition"><i class="fas fa-home mr-2"></i>タイトルに戻る</button>
+                    </div>
+                    <div class="mt-8">
+                        <p class="text-sm text-white/70 mb-2">学習データを書き出す</p>
+                        <div class="flex justify-center gap-4">
+                            <button id="export-json-btn" class="text-sm bg-white/10 hover:bg-white/20 py-2 px-4 rounded-lg"><i class="fas fa-file-code mr-2"></i>JSON</button>
+                            <button id="export-csv-btn" class="text-sm bg-white/10 hover:bg-white/20 py-2 px-4 rounded-lg"><i class="fas fa-file-csv mr-2"></i>WordHolic (CSV)</button>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+             <!-- エラー表示 -->
+            <div id="error-view" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl text-center">
+                <i class="fas fa-exclamation-triangle text-5xl text-red-400 mb-4"></i>
+                <h2 class="text-2xl font-bold text-red-400 mb-2">エラーが発生しました</h2>
+                <p id="error-message" class="text-white/80 mb-6"></p>
+                <button id="error-back-btn" class="bg-white/20 hover:bg-white/30 font-bold py-3 px-6 rounded-xl transition">タイトルに戻る</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- モーダルウィンドウ -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4">
+        <!-- 設定モーダル -->
+        <div id="settings-modal" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl w-full max-w-md relative">
+            <button class="close-modal-btn absolute top-4 right-4 text-white/50 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
+            <h2 class="text-3xl font-black mb-6"><i class="fas fa-gear mr-3"></i>設定</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="api-key-input" class="block font-semibold mb-1">OpenRouter APIキー</label>
+                    <input type="password" id="api-key-input" class="w-full bg-white/10 border border-white/20 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-purple-400" placeholder="sk-or-...">
+                    <p class="text-xs text-white/60 mt-1">APIキーはブラウザのローカルストレージに保存されます。</p>
+                </div>
+            </div>
+            <button id="save-settings-btn" class="w-full mt-8 bg-purple-600 hover:bg-purple-700 font-bold py-3 px-4 rounded-xl transition shadow-lg">
+                <span id="save-settings-text">保存する</span>
+                <span id="save-settings-success" class="hidden">保存しました！</span>
+            </button>
+        </div>
+
+        <!-- 使い方モーダル -->
+        <div id="help-modal" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl w-full max-w-2xl relative">
+            <button class="close-modal-btn absolute top-4 right-4 text-white/50 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
+            <h2 class="text-3xl font-black mb-6"><i class="fas fa-lightbulb mr-3"></i>使い方</h2>
+            <div class="text-left space-y-4 text-white/90">
+                <div>
+                    <h3 class="font-bold text-lg"><span class="text-cyan-300">1.</span> APIキーの設定</h3>
+                    <p>右上の「設定」から、お使いのOpenRouter APIキーを設定してください。キーは安全にブラウザ内に保存されます。</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg"><span class="text-cyan-300">2.</span> PDFをアップロード</h3>
+                    <p>「PDFを選択」ボタンから、暗記カードにしたいファイルを選びます。複数選択も可能です。</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg"><span class="text-cyan-300">3.</span> 暗記カードを生成</h3>
+                    <p>生成したいカードの枚数を選び、「生成開始」ボタンを押してください。AIがPDFの内容を解析し、自動でカードを作成します。</p>
+                </div>
+                 <div>
+                    <h3 class="font-bold text-lg"><span class="text-cyan-300">4.</span> 学習開始</h3>
+                    <p>生成されたカードが表示されます。カードをタップすると答えが見れます。「正解」「不正解」で進めていきましょう。右下のフローティングボタンを押すとAIが詳しい解説をしてくれます。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI解説モーダル -->
+        <div id="explanation-modal" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl w-full max-w-2xl relative">
+            <button class="close-modal-btn absolute top-4 right-4 text-white/50 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
+            <h2 class="text-3xl font-black mb-2 flex items-center gap-3"><i class="fa-solid fa-brain text-blue-300"></i>AIによる解説</h2>
+            <p id="explanation-question" class="font-bold text-lg text-white/80 mb-4 border-b border-white/20 pb-2"></p>
+            <div id="explanation-content" class="text-left text-white/90 max-h-80 overflow-y-auto custom-scrollbar pr-4"></div>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
+
