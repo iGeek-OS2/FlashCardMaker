@@ -4,7 +4,6 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs
 document.addEventListener('DOMContentLoaded', () => {
     // --- 状態管理 ---
     const state = {
-        apiKey: localStorage.getItem('apiKey') || '',
         pdfText: '',
         flashcards: [],
         currentCardIndex: 0,
@@ -22,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const modals = {
         overlay: document.getElementById('modal-overlay'),
-        settings: document.getElementById('settings-modal'),
         help: document.getElementById('help-modal'),
         explanation: document.getElementById('explanation-modal'),
     };
@@ -71,32 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function init() {
         showView('initial');
         setupEventListeners();
-        loadSettings();
-        if (!state.apiKey) {
-            setTimeout(() => showModal('settings'), 500);
-        }
     }
     
-    // --- 設定の読み込みと保存 ---
-    function loadSettings() {
-        document.getElementById('api-key-input').value = state.apiKey;
-    }
-
-    function saveSettings() {
-        state.apiKey = document.getElementById('api-key-input').value;
-        localStorage.setItem('apiKey', state.apiKey);
-
-        const saveBtnText = document.getElementById('save-settings-text');
-        const saveBtnSuccess = document.getElementById('save-settings-success');
-        saveBtnText.classList.add('hidden');
-        saveBtnSuccess.classList.remove('hidden');
-        setTimeout(() => {
-            saveBtnText.classList.remove('hidden');
-            saveBtnSuccess.classList.add('hidden');
-            closeModal();
-        }, 1500);
-    }
-
     // --- イベントリスナー設定 ---
     function setupEventListeners() {
         document.getElementById('upload-pdf-btn').addEventListener('click', () => pdfInput.click());
@@ -114,13 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('import-json-btn').addEventListener('click', () => document.getElementById('json-input').click());
         document.getElementById('json-input').addEventListener('change', handleJsonImport);
 
-        document.getElementById('settings-btn').addEventListener('click', () => showModal('settings'));
         document.getElementById('help-btn').addEventListener('click', () => showModal('help'));
         document.querySelectorAll('.close-modal-btn').forEach(btn => btn.addEventListener('click', closeModal));
         modals.overlay.addEventListener('click', (e) => {
             if (e.target === modals.overlay) closeModal();
         });
-        document.getElementById('save-settings-btn').addEventListener('click', saveSettings);
 
         cardFlipper.addEventListener('click', flipCard);
         document.getElementById('correct-btn').addEventListener('click', () => handleAnswer(true));
@@ -188,15 +160,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- AI API呼び出し ---
     async function callOpenRouterAPI(messages, expectJson = false) {
-         if (!state.apiKey) {
-            showError('APIキーが設定されていません。設定画面でキーを入力してください。');
+        const PROXY_SERVER_URL = 'YOUR_CLOUDFLARE_WORKER_URL'; // <-- README.md の手順に従って設定してください
+
+        if (PROXY_SERVER_URL === 'YOUR_CLOUDFLARE_WORKER_URL') {
+            showError('プロキシサーバーのURLが設定されていません。script.jsファイルを編集し、README.mdの手順に従って設定を完了してください。');
             return null;
         }
-
+        
         const headers = {
-            'Authorization': `Bearer ${state.apiKey}`,
             'Content-Type': 'application/json',
-            'HTTP-Referer': location.href
         };
 
         const body = {
@@ -208,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            const response = await fetch(PROXY_SERVER_URL, {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(body)
