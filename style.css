@@ -63,12 +63,6 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: rgba(255,255,255,0.5);
 }
-.card-count-btn.selected {
-    background-color: #a855f7; /* purple-500 */
-    color: white;
-    font-weight: bold;
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
-}
 /* Markdown content styling */
 #explanation-content h2 {
     font-size: 1.25rem;
@@ -91,5 +85,9 @@ body {
 }
 #explanation-content strong {
     color: #6ee7b7; /* emerald-300 */
+}
+/* Custom Dropdown Animation */
+#dropdown-options {
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
