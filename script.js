@@ -156,8 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     fullText += textContent.items.map(item => item.str).join('\n') + '\n\n';
                 }
             } catch (err) {
-                 showError(`PDFファイルの処理中にエラーが発生しました: ${file.name}. ${err.message}`);
-                 document.getElementById('upload-text').textContent = 'クリックしてファイルを選択';
+                showError(`PDFファイルの処理中にエラーが発生しました: ${file.name}. ${err.message}`);
+                document.getElementById('upload-text').textContent = 'クリックしてファイルを選択';
                 return;
             }
         }
@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
         state.currentCardIndex = 0;
         state.correctAnswers = 0;
         if (state.flashcards.length === 0) {
-             showError('生成されたカードがありません。');
+            showError('生成されたカードがありません。');
             return;
         }
         // 配列をシャッフル
@@ -367,13 +367,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const incorrectOffset = total > 0 ? circumference * (1 - (incorrect / total)) : circumference;
 
         setTimeout(() => {
-             document.getElementById('correct-circle').style.strokeDashoffset = correctOffset;
-             document.getElementById('incorrect-circle').style.strokeDashoffset = incorrectOffset;
+            document.getElementById('correct-circle').style.strokeDashoffset = correctOffset;
+            document.getElementById('incorrect-circle').style.strokeDashoffset = incorrectOffset;
         }, 100);
     }
 
     function restartQuiz() {
-         startQuiz();
+        startQuiz();
     }
 
     function resetApp() {
@@ -388,13 +388,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- AI解説 ---
     async function generateExplanation() {
-         const explainBtnIcon = document.getElementById('explain-btn-icon');
-         const explainSpinner = document.getElementById('explain-spinner');
-         const aiExplainBtn = document.getElementById('ai-explain-btn');
+        const explainBtnIcon = document.getElementById('explain-btn-icon');
+        const explainSpinner = document.getElementById('explain-spinner');
+        const aiExplainBtn = document.getElementById('ai-explain-btn');
         
-         aiExplainBtn.disabled = true;
-         explainBtnIcon.classList.add('hidden');
-         explainSpinner.classList.remove('hidden');
+        aiExplainBtn.disabled = true;
+        explainBtnIcon.classList.add('hidden');
+        explainSpinner.classList.remove('hidden');
 
         const currentCard = state.flashcards[state.currentCardIndex];
         const question = currentCard.frontText;
@@ -438,7 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (explanationText) {
             document.getElementById('explanation-content').innerHTML = marked.parse(explanationText);
         } else {
-             document.getElementById('explanation-content').textContent = '解説の生成に失敗しました。';
+            document.getElementById('explanation-content').textContent = '解説の生成に失敗しました。';
         }
         
         aiExplainBtn.disabled = false;
@@ -477,4 +477,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- アプリケーション開始 ---
     init();
 });
-
