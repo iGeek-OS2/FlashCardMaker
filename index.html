@@ -26,7 +26,6 @@
             </h1>
             <nav>
                 <button id="help-btn" class="px-4 py-2 rounded-lg hover:bg-white/20 transition"><i class="fas fa-lightbulb mr-2"></i>使い方</button>
-                <button id="settings-btn" class="px-4 py-2 rounded-lg hover:bg-white/20 transition"><i class="fas fa-gear mr-2"></i>設定</button>
             </nav>
         </header>
 
@@ -164,43 +163,26 @@
 
     <!-- モーダルウィンドウ -->
     <div id="modal-overlay" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4">
-        <!-- 設定モーダル -->
-        <div id="settings-modal" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl w-full max-w-md relative">
-            <button class="close-modal-btn absolute top-4 right-4 text-white/50 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
-            <h2 class="text-3xl font-black mb-6"><i class="fas fa-gear mr-3"></i>設定</h2>
-            <div class="space-y-4">
-                <div>
-                    <label for="api-key-input" class="block font-semibold mb-1">OpenRouter APIキー</label>
-                    <input type="password" id="api-key-input" class="w-full bg-white/10 border border-white/20 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-purple-400" placeholder="sk-or-...">
-                    <p class="text-xs text-white/60 mt-1">APIキーはブラウザのローカルストレージに保存されます。</p>
-                </div>
-            </div>
-            <button id="save-settings-btn" class="w-full mt-8 bg-purple-600 hover:bg-purple-700 font-bold py-3 px-4 rounded-xl transition shadow-lg">
-                <span id="save-settings-text">保存する</span>
-                <span id="save-settings-success" class="hidden">保存しました！</span>
-            </button>
-        </div>
-
         <!-- 使い方モーダル -->
         <div id="help-modal" class="hidden glassmorphism rounded-3xl p-8 shadow-2xl w-full max-w-2xl relative">
             <button class="close-modal-btn absolute top-4 right-4 text-white/50 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
             <h2 class="text-3xl font-black mb-6"><i class="fas fa-lightbulb mr-3"></i>使い方</h2>
             <div class="text-left space-y-4 text-white/90">
                 <div>
-                    <h3 class="font-bold text-lg"><span class="text-cyan-300">1.</span> APIキーの設定</h3>
-                    <p>右上の「設定」から、お使いのOpenRouter APIキーを設定してください。キーは安全にブラウザ内に保存されます。</p>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg"><span class="text-cyan-300">2.</span> PDFをアップロード</h3>
+                    <h3 class="font-bold text-lg"><span class="text-cyan-300">1.</span> PDFをアップロード</h3>
                     <p>「PDFを選択」ボタンから、暗記カードにしたいファイルを選びます。複数選択も可能です。</p>
                 </div>
                 <div>
-                    <h3 class="font-bold text-lg"><span class="text-cyan-300">3.</span> 暗記カードを生成</h3>
+                    <h3 class="font-bold text-lg"><span class="text-cyan-300">2.</span> 暗記カードを生成</h3>
                     <p>生成したいカードの枚数を選び、「生成開始」ボタンを押してください。AIがPDFの内容を解析し、自動でカードを作成します。</p>
                 </div>
                  <div>
-                    <h3 class="font-bold text-lg"><span class="text-cyan-300">4.</span> 学習開始</h3>
+                    <h3 class="font-bold text-lg"><span class="text-cyan-300">3.</span> 学習開始</h3>
                     <p>生成されたカードが表示されます。カードをタップすると答えが見れます。「正解」「不正解」で進めていきましょう。右下のフローティングボタンを押すとAIが詳しい解説をしてくれます。</p>
+                </div>
+                 <div>
+                    <h3 class="font-bold text-lg"><span class="text-cyan-300">重要:</span> APIキーについて</h3>
+                    <p>このツールは、APIキーを安全に管理するためにサーバー機能を必要とします。詳しくは `README.md` を参照して、Cloudflare Workersでプロキシサーバーを設定してください。</p>
                 </div>
             </div>
         </div>
