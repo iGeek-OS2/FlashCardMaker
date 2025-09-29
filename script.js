@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- AI API呼び出し ---
     async function callOpenRouterAPI(messages, expectJson = false) {
-        const PROXY_SERVER_URL = 'YOUR_CLOUDFLARE_WORKER_URL'; // <-- README.md の手順に従って設定してください
+        const PROXY_SERVER_URL = 'https://flashmaker-api-proxy.dfg147147147.workers.dev'; // <-- README.md の手順に従って設定してください
 
         if (PROXY_SERVER_URL === 'YOUR_CLOUDFLARE_WORKER_URL') {
             showError('プロキシサーバーのURLが設定されていません。script.jsファイルを編集し、README.mdの手順に従って設定を完了してください。');
