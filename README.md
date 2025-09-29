@@ -1,2 +1,34 @@
-# FlashCardMaker
-Just site that make flash cards for exam
+# FlashMaker Web ⚡️
+
+**PDFからAIが自動で暗記カードを生成するWebアプリ**  
+講義資料などを数クリックでインタラクティブな学習カードに変換できます。
+
+---
+
+## ✨ 主な機能
+
+- **AIカード生成**: PDFの重要点をAIが質問と答え形式で抽出  
+- **複数PDF対応**: 複数のPDFを一度にアップロード・解析  
+- **AIによる詳細解説**: ワンクリックでAIが用語を詳細解説  
+- **学習結果の可視化**: クイズ終了後、正解率をグラフで表示  
+- **インポート/エクスポート**: JSON形式での保存・読込、WordHolic用CSVエクスポートに対応  
+
+---
+
+## 🛠️ 技術スタック
+
+- **フロントエンド**: HTML, CSS, JavaScript  
+  - Tailwind CSS  
+  - pdf.js  
+  - marked.js  
+- **バックエンド/AI**: Cloudflare Workers & Cloudflare AI  
+
+---
+
+## 🚀 今後の展望
+
+- モバイル最適化UI  
+- Anki形式エクスポート  
+- 学習履歴のクラウド保存  
+
+---
