@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const body = {
             // AIモデルをMeta社のLlama 3にアップグレード
-            model: '@cf/meta/llama-3-8b-instruct',
+            model: 'google/gemma-3-27b-it:free',
             messages: messages,
         };
         if (expectJson) {
