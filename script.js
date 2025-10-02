@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentCardIndex: 0,
         correctAnswers: 0,
         isGenerating: false,
-        selectedCardCount: 20,
+        selectedCardCount: 10,
     };
 
     // --- DOM要素 ---
@@ -199,7 +199,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const body = {
-            model: 'google/gemma-2-9b-it',
+            // AIモデルをMeta社のLlama 3にアップグレード
+            model: '@cf/meta/llama-3-8b-instruct',
             messages: messages,
         };
         if (expectJson) {
@@ -241,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateGenerateButtonUI();
 
         const cardCount = state.selectedCardCount;
-        const systemPrompt = `あなたは、学習効果を最大化する暗記カードを作成する専門家AIです。以下の指示を**絶対的なルール**として、最高品質の日本語の暗記カードを生成してください。
+        const systemPrompt = `あなたは、Metaが開発した最新のAI、Llama 3です。あなたの任務は、与えられたテキストから最高の学習効果を持つ日本語の暗記カードを生成することです。以下の指示は絶対的なルールであり、一字一句違わず従ってください。
 
 ### 【最優先命令】枚数とフォーマットの絶対厳守
 1.  **枚数の厳守:** これは全ての指示の中で最も重要です。**いかなる理由があろうとも、必ず指定された\`${cardCount}\`枚のカードを生成してください。** テキストの情報が少ない場合は、一つの重要な概念を複数の角度（例：「〜とは何か？」「なぜ〜が必要か？」「〜の具体例は？」）から問うなど、創造性を発揮して必ず\`${cardCount}\`枚にしてください。過不足は一切認められません。
@@ -260,12 +261,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 2.  **品質の具体例:**
     -   **悪い例（生成禁止）:**
-        -   `{"frontText": "公開鍵暗号", "backText": "公開鍵と秘密鍵のペアで暗号化・復号を行う方式"}`
+        -   \`{"frontText": "公開鍵暗号", "backText": "公開鍵と秘密鍵のペアで暗-号化・復号を行う方式"}\`
     -   **良い例（このようなカードを生成せよ）:**
-        -   `{"frontText": "公開鍵暗号方式が、従来の共通鍵暗号方式と比べて安全性が高いとされる主な理由は何ですか？", "backText": "秘密鍵を通信相手に渡す必要がなく、盗聴のリスクを根本的に排除できるため。"}`
-        -   `{"frontText": "デジタル署名において、送信者が自身の秘密鍵で署名する目的は何ですか？", "backText": "送信者の本人性と、メッセージが改ざんされていないことを保証するため。"}`
+        -   \`{"frontText": "公開鍵暗号方式が、従来の共通鍵暗号方式と比べて安全性が高いとされる主な理由は何ですか？", "backText": "秘密鍵を通信相手に渡す必要がなく、盗聴のリスクを根本的に排除できるため。"}\`
+        -   \`{"frontText": "デジタル署名において、送信者が自身の秘密鍵で署名する目的は何ですか？", "backText": "送信者の本人性と、メッセージが改ざんされていないことを保証するため。"}\`
 
-3.  **回答の簡潔さ:** `backText`は、質問の核に答える最も重要なキーワードや短い一文にしてください。冗長な説明は不要です。
+3.  **回答の簡潔さ:** \`backText\`は、質問の核に答える最も重要なキーワードや短い一文にしてください。冗長な説明は不要です。
 
 ### 【その他のルール】
 -   **抽出対象:** 教科書や資料の本文から、学術的な概念、定義、事実のみを抽出してください。
