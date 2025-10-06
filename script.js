@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentCardIndex: 0,
         correctAnswers: 0,
         isGenerating: false,
-        selectedCardCount: 10, // デフォルト値を10に変更
+        selectedCardCount: 10,
+        selectedDifficulty: 'ふつう', // 難易度の状態を追加
     };
 
     // --- DOM要素 ---
@@ -39,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedCountText = document.getElementById('selected-count-text');
     const chevron = dropdownToggle.querySelector('i');
     const uploadArea = document.getElementById('upload-area');
+    const difficultySelector = document.getElementById('difficulty-selector');
+    const quizBackBtn = document.getElementById('quiz-back-btn');
 
 
     // --- 表示切り替え関数 ---
@@ -109,6 +112,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 chevron.classList.remove('rotate-180');
             }
         });
+
+        // Difficulty Selector Logic
+        difficultySelector.addEventListener('click', (e) => {
+            if (e.target.classList.contains('difficulty-btn')) {
+                difficultySelector.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                state.selectedDifficulty = e.target.dataset.difficulty;
+            }
+        });
+        
+        quizBackBtn.addEventListener('click', resetApp);
 
         document.getElementById('import-json-btn').addEventListener('click', () => document.getElementById('json-input').click());
         document.getElementById('json-input').addEventListener('change', handleJsonImport);
@@ -241,9 +255,22 @@ document.addEventListener('DOMContentLoaded', () => {
         updateGenerateButtonUI();
 
         const cardCount = state.selectedCardCount;
-        // 指定された枚数でJSONの雛形を作成
         const cardTemplates = Array.from({ length: cardCount }, () => ({ frontText: "", backText: "" }));
         const jsonTemplate = JSON.stringify({ flashcards: cardTemplates }, null, 2);
+
+        let difficultyInstruction = '';
+        switch (state.selectedDifficulty) {
+            case 'やさしい':
+                difficultyInstruction = '質問は「〜とは何ですか？」のような、用語の定義を問う非常に基本的なものにしてください。答えは一言か、ごく短いフレーズで答えてください。';
+                break;
+            case 'むずかしい':
+                difficultyInstruction = '質問は、複数の概念を比較させたり、原因や結果、重要性について考察させたりする、より深い理解を必要とするものにしてください。答えもそれに合わせて詳細に記述してください。';
+                break;
+            case 'ふつう':
+            default:
+                difficultyInstruction = '質問は「〜を説明してください」のような、基本的な概念の理解度を測る標準的なものにしてください。答えは要点をまとめた簡潔な説明にしてください。';
+                break;
+        }
 
         const systemPrompt = `あなたは、提供されたPDFのテキスト内容を分析し、指定されたJSONフォーマットに従って日本語の暗記カードを完成させる専門家AIです。
 
@@ -258,9 +285,8 @@ ${jsonTemplate}
 1.  **構造の変更禁止:** 提供されたJSONの構造（キーの名前、オブジェクトの数）を絶対に変更しないでください。
 2.  **枚数の厳守:** テンプレートにある\`${cardCount}\`個のカードをすべて埋めてください。数を増やしたり減らしたりしてはいけません。
 3.  **内容の品質:**
+    * **難易度: ${state.selectedDifficulty}** - ${difficultyInstruction}
     * 質問（frontText）と答え（backText）は、PDFの主要な概念に基づいている必要があります。
-    * 質問は「〜とは何ですか？」「なぜ〜が重要か？」のような基本的な問いかけにしてください。
-    * 答えは簡潔で、重要なキーワードを含むようにしてください。
     * 小学生や中学生にも理解できるような、やさしい言葉遣いを心がけてください。
 4.  **除外事項:** 学習に無関係な情報（例：ページ番号、著者名、日付）は含めないでください。
 
@@ -281,11 +307,9 @@ ${jsonTemplate}
         
         if (responseContent) {
             try {
-                // Sometimes the response might be wrapped in ```json ... ```, so we need to clean it.
                 const cleanedResponse = responseContent.replace(/^```json\s*|```$/g, '').trim();
                 const parsed = JSON.parse(cleanedResponse);
                 if (parsed.flashcards) {
-                    // 完全に空のカードを除外するフィルタリングを追加
                     const filledCards = parsed.flashcards.filter(card => card.frontText.trim() !== "" && card.backText.trim() !== "");
                     if (filledCards.length === 0) {
                         throw new Error('AIがカードを生成できませんでした。テキストが短すぎるか、内容が不適切である可能性があります。');
@@ -323,7 +347,6 @@ ${jsonTemplate}
             showError('生成されたカードがありません。');
             return;
         }
-        // 配列をシャッフル
         state.flashcards.sort(() => Math.random() - 0.5);
         showView('flashcard');
         displayCurrentCard();
@@ -484,3 +507,4 @@ ${jsonTemplate}
     // --- アプリケーション開始 ---
     init();
 });
+
