@@ -241,33 +241,33 @@ document.addEventListener('DOMContentLoaded', () => {
         updateGenerateButtonUI();
 
         const cardCount = state.selectedCardCount;
-        const systemPrompt = `あなたは、学習者にとってわかりやすい暗記カードを作成する専門家AIです。以下の指示を**必ず守って**、日本語の暗記カードを生成してください。
+        // 指定された枚数でJSONの雛形を作成
+        const cardTemplates = Array.from({ length: cardCount }, () => ({ frontText: "", backText: "" }));
+        const jsonTemplate = JSON.stringify({ flashcards: cardTemplates }, null, 2);
 
-### 【最優先ルール】
-1. **枚数の厳守:** 必ず指定された\`${cardCount}\`枚を作成すること。少なくても多くてもいけません。
-2. **フォーマット:** 出力は JSON 形式で、次の形だけを使ってください。  
-   {"flashcards": [{"frontText": "質問1", "backText": "答え1"}, ...] }
+        const systemPrompt = `あなたは、提供されたPDFのテキスト内容を分析し、指定されたJSONフォーマットに従って日本語の暗記カードを完成させる専門家AIです。
 
-### 【問題の作り方】
-- **やさしい言葉で**書くこと。難しい専門用語は使わず、もし必要なら簡単な説明に置き換える。  
-- **基本的な問いかけ**を中心にすること。
-  - 「〜とは何ですか？」
-  - 「なぜ〜が大切ですか？」
-  - 「〜の例を1つ挙げてください」
-  - 「〜と〜の違いは何ですか？」
-- 小学生や中学生でも理解できるレベルを意識すること。
+### 【最優先タスク】
+あなたの唯一のタスクは、以下のJSONテンプレートにある\`${cardCount}\`個の空の暗記カードオブジェクト（"frontText": "", "backText": ""）を、PDFの内容に基づいて具体的な質問と答えで埋めることです。
 
-### 【答えの書き方】
-- 短く、シンプルに。
-- キーワードや短文でOK。長すぎる説明は不要。
+\`\`\`json
+${jsonTemplate}
+\`\`\`
 
-### 【除外事項】
-- 授業スケジュール、日付、ページ番号、著者名など、学習に直接関係ない内容は使わない。
+### 【厳守事項】
+1.  **構造の変更禁止:** 提供されたJSONの構造（キーの名前、オブジェクトの数）を絶対に変更しないでください。
+2.  **枚数の厳守:** テンプレートにある\`${cardCount}\`個のカードをすべて埋めてください。数を増やしたり減らしたりしてはいけません。
+3.  **内容の品質:**
+    * 質問（frontText）と答え（backText）は、PDFの主要な概念に基づいている必要があります。
+    * 質問は「〜とは何ですか？」「なぜ〜が重要か？」のような基本的な問いかけにしてください。
+    * 答えは簡潔で、重要なキーワードを含むようにしてください。
+    * 小学生や中学生にも理解できるような、やさしい言葉遣いを心がけてください。
+4.  **除外事項:** 学習に無関係な情報（例：ページ番号、著者名、日付）は含めないでください。
 
-### 【出力】
-以上を守り、提供されたテキストから基本的な知識を確認できる\`${cardCount}\`枚の暗記カードを生成してください。`;
+### 【最終出力】
+最終的な出力は、上記のテンプレートが完全に埋められた、単一の有効なJSONオブジェクトでなければなりません。余計なテキスト（例：「はい、承知しました」などの挨拶や、\`\`\`json ... \`\`\`のようなマークダウン）は一切含めないでください。`;
         
-        const userQuery = `以下のテキストを分析し、主要な概念に基づいた${cardCount}個のフラッシュカード（質問と答え）を作成してください:\n\n${state.pdfText.substring(0, 15000)}`;
+        const userQuery = `以下のテキストを分析し、提供されたJSONテンプレートを完成させてください。:\n\n${state.pdfText.substring(0, 15000)}`;
 
         const messages = [
             { role: "system", content: systemPrompt },
@@ -285,13 +285,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cleanedResponse = responseContent.replace(/^```json\s*|```$/g, '').trim();
                 const parsed = JSON.parse(cleanedResponse);
                 if (parsed.flashcards) {
-                    state.flashcards = parsed.flashcards;
+                    // 完全に空のカードを除外するフィルタリングを追加
+                    const filledCards = parsed.flashcards.filter(card => card.frontText.trim() !== "" && card.backText.trim() !== "");
+                    if (filledCards.length === 0) {
+                        throw new Error('AIがカードを生成できませんでした。テキストが短すぎるか、内容が不適切である可能性があります。');
+                    }
+                    state.flashcards = filledCards;
                     startQuiz();
                 } else {
                     throw new Error('APIの応答に "flashcards" 配列が含まれていません。');
                 }
             } catch (err) {
-                showError(`AIの応答の解析に失敗しました。応答が有効なJSONではありません。エラー: ${err.message}`);
+                showError(`AIの応答の解析に失敗しました。エラー: ${err.message}`);
             }
         }
     }
@@ -479,4 +484,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- アプリケーション開始 ---
     init();
 });
-
