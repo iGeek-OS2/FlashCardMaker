@@ -29,7 +29,7 @@
             <div id="initial-view" class="w-full max-w-lg md:max-w-2xl">
                 <div class="glassmorphism rounded-3xl p-6 md:p-8 shadow-2xl text-center">
                      <h2 class="text-xl md:text-2xl font-black mb-2">PDFからAIで暗記カードを自動生成</h2>
-                    <p class="text-sm md:text-base text-white/80 mb-8">3ステップで、学習を始めよう。</p>
+                    <p class="text-sm md:text-base text-white/80 mb-8">4ステップで、学習を始めよう。</p>
                     
                     <div class="space-y-6 text-left">
                         <div>
@@ -61,7 +61,16 @@
                         </div>
 
                         <div>
-                             <label class="font-bold text-base mb-2 flex items-center"><span class="bg-pink-500 text-white rounded-full h-6 w-6 flex items-center justify-center mr-3 font-bold text-xs">3</span>生成を開始</label>
+                            <label class="font-bold text-base mb-2 flex items-center"><span class="bg-teal-500 text-white rounded-full h-6 w-6 flex items-center justify-center mr-3 font-bold text-xs">3</span>難易度を選択</label>
+                            <div id="difficulty-selector" class="grid grid-cols-3 gap-2 rounded-xl glassmorphism p-1">
+                                <button class="difficulty-btn p-2 rounded-lg text-sm font-semibold transition" data-difficulty="やさしい">やさしい</button>
+                                <button class="difficulty-btn active p-2 rounded-lg text-sm font-semibold transition" data-difficulty="ふつう">ふつう</button>
+                                <button class="difficulty-btn p-2 rounded-lg text-sm font-semibold transition" data-difficulty="むずかしい">むずかしい</button>
+                            </div>
+                        </div>
+
+                        <div>
+                             <label class="font-bold text-base mb-2 flex items-center"><span class="bg-pink-500 text-white rounded-full h-6 w-6 flex items-center justify-center mr-3 font-bold text-xs">4</span>生成を開始</label>
                             <button id="generate-cards-btn" class="w-full bg-purple-600 hover:bg-purple-700 font-bold py-3 px-4 rounded-xl text-base transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                                 <span id="generate-btn-text"><i class="fas fa-play mr-2"></i>生成開始</span>
                                 <span id="generate-spinner" class="hidden"><i class="fas fa-spinner fa-spin mr-2"></i>生成中...</span>
@@ -78,9 +87,12 @@
                 </div>
             </div>
 
-            <div id="flashcard-view" class="hidden w-full">
+            <div id="flashcard-view" class="hidden w-full relative">
+                 <button id="quiz-back-btn" class="absolute top-0 left-0 text-sm md:text-base px-3 py-2 rounded-lg hover:bg-white/20 transition z-10">
+                    <i class="fas fa-chevron-left mr-2"></i>タイトルに戻る
+                </button>
                 <div class="max-w-lg md:max-w-2xl mx-auto">
-                    <div class="text-center mb-4">
+                    <div class="text-center mb-4 pt-10">
                         <p id="card-progress" class="font-bold text-lg md:text-xl"></p>
                         <div class="w-full bg-white/20 rounded-full h-2.5 mt-2">
                             <div id="progress-bar" class="bg-cyan-400 h-2.5 rounded-full transition-all duration-300"></div>
@@ -170,7 +182,7 @@
                 </div>
                 <div>
                     <h3 class="font-bold text-lg"><span class="text-cyan-300">2.</span> 暗記カードを生成</h3>
-                    <p>生成したいカードの枚数を選び、「生成開始」ボタンを押してください。AIがPDFの内容を解析し、自動でカードを作成します。</p>
+                    <p>生成したいカードの枚数と難易度を選び、「生成開始」ボタンを押してください。AIがPDFの内容を解析し、自動でカードを作成します。</p>
                 </div>
                  <div>
                     <h3 class="font-bold text-lg"><span class="text-cyan-300">3.</span> 学習開始</h3>
