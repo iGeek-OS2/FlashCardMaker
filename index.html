@@ -29,7 +29,7 @@
             <div id="initial-view" class="w-full max-w-lg md:max-w-2xl">
                 <div class="glassmorphism rounded-3xl p-6 md:p-8 shadow-2xl text-center">
                      <h2 class="text-xl md:text-2xl font-black mb-2">PDFからAIで暗記カードを自動生成</h2>
-                    <p class="text-sm md:text-base text-white/80 mb-8">4ステップで、学習を始めよう。</p>
+                    <p class="text-sm md:text-base text-white/80 mb-8">5ステップで、学習を始めよう。</p>
                     
                     <div class="space-y-6 text-left">
                         <div>
@@ -68,9 +68,18 @@
                                 <button class="difficulty-btn p-2 rounded-lg text-sm font-semibold transition" data-difficulty="むずかしい">むずかしい</button>
                             </div>
                         </div>
+                        
+                        <div>
+                            <label class="font-bold text-base mb-2 flex items-center"><span class="bg-orange-500 text-white rounded-full h-6 w-6 flex items-center justify-center mr-3 font-bold text-xs">4</span>文章の長さを選択</label>
+                            <div id="text-length-selector" class="grid grid-cols-3 gap-2 rounded-xl glassmorphism p-1">
+                                <button class="length-btn p-2 rounded-lg text-sm font-semibold transition" data-length="みじかい">みじかい</button>
+                                <button class="length-btn active p-2 rounded-lg text-sm font-semibold transition" data-length="ふつう">ふつう</button>
+                                <button class="length-btn p-2 rounded-lg text-sm font-semibold transition" data-length="ながい">ながい</button>
+                            </div>
+                        </div>
 
                         <div>
-                             <label class="font-bold text-base mb-2 flex items-center"><span class="bg-pink-500 text-white rounded-full h-6 w-6 flex items-center justify-center mr-3 font-bold text-xs">4</span>生成を開始</label>
+                             <label class="font-bold text-base mb-2 flex items-center"><span class="bg-pink-500 text-white rounded-full h-6 w-6 flex items-center justify-center mr-3 font-bold text-xs">5</span>生成を開始</label>
                             <button id="generate-cards-btn" class="w-full bg-purple-600 hover:bg-purple-700 font-bold py-3 px-4 rounded-xl text-base transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                                 <span id="generate-btn-text"><i class="fas fa-play mr-2"></i>生成開始</span>
                                 <span id="generate-spinner" class="hidden"><i class="fas fa-spinner fa-spin mr-2"></i>生成中...</span>
@@ -132,7 +141,7 @@
                                 <svg class="w-full h-full" viewBox="0 0 100 100">
                                     <circle class="text-green-500/20" stroke-width="10" stroke="currentColor" fill="transparent" r="45" cx="50" cy="50" />
                                     <circle id="correct-circle" class="text-green-500 transition-all duration-1000" stroke-width="10" stroke-linecap="round" stroke="currentColor" fill="transparent" r="45" cx="50" cy="50" style="stroke-dasharray: 283; stroke-dashoffset: 283; transform: rotate(-90deg); transform-origin: 50% 50%;" />
-                                </svg>
+                                 </svg>
                                 <span id="correct-count" class="absolute inset-0 flex items-center justify-center text-2xl md:text-3xl font-bold"></span>
                             </div>
                             <p class="mt-4 text-base md:text-xl font-semibold">正解</p>
@@ -182,7 +191,7 @@
                 </div>
                 <div>
                     <h3 class="font-bold text-lg"><span class="text-cyan-300">2.</span> 暗記カードを生成</h3>
-                    <p>生成したいカードの枚数と難易度を選び、「生成開始」ボタンを押してください。AIがPDFの内容を解析し、自動でカードを作成します。</p>
+                    <p>生成したいカードの枚数、難易度、文章の長さを選び、「生成開始」ボタンを押してください。AIがPDFの内容を解析し、自動でカードを作成します。</p>
                 </div>
                  <div>
                     <h3 class="font-bold text-lg"><span class="text-cyan-300">3.</span> 学習開始</h3>
@@ -212,3 +221,4 @@
 
 </body>
 </html>
+
