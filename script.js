@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
         correctAnswers: 0,
         isGenerating: false,
         selectedCardCount: 10,
-        selectedDifficulty: 'ふつう', // 難易度の状態を追加
+        selectedDifficulty: 'ふつう',
+        selectedTextLength: 'ふつう', // 文章の長さの状態を追加
     };
 
     // --- DOM要素 ---
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chevron = dropdownToggle.querySelector('i');
     const uploadArea = document.getElementById('upload-area');
     const difficultySelector = document.getElementById('difficulty-selector');
+    const textLengthSelector = document.getElementById('text-length-selector');
     const quizBackBtn = document.getElementById('quiz-back-btn');
 
 
@@ -119,6 +121,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 difficultySelector.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
                 e.target.classList.add('active');
                 state.selectedDifficulty = e.target.dataset.difficulty;
+            }
+        });
+
+        // Text Length Selector Logic
+        textLengthSelector.addEventListener('click', (e) => {
+            if (e.target.classList.contains('length-btn')) {
+                textLengthSelector.querySelectorAll('.length-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                state.selectedTextLength = e.target.dataset.length;
             }
         });
         
@@ -272,6 +283,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
         }
 
+        let textLengthInstruction = '';
+        switch (state.selectedTextLength) {
+            case 'みじかい':
+                textLengthInstruction = '質問と答えの両方を、キーワードや非常に短い単語・フレーズレベルで構成してください。';
+                break;
+            case 'ながい':
+                textLengthInstruction = '質問と答えは、背景情報や文脈を含んだ複数の文章で構成し、詳細に記述してください。';
+                break;
+            case 'ふつう':
+            default:
+                textLengthInstruction = '質問と答えは、要点をまとめた1〜2文の簡潔な文章で構成してください。';
+                break;
+        }
+
         const systemPrompt = `あなたは、提供されたPDFのテキスト内容を分析し、指定されたJSONフォーマットに従って日本語の暗記カードを完成させる専門家AIです。
 
 ### 【最優先タスク】
@@ -286,6 +311,7 @@ ${jsonTemplate}
 2.  **枚数の厳守:** テンプレートにある\`${cardCount}\`個のカードをすべて埋めてください。数を増やしたり減らしたりしてはいけません。
 3.  **内容の品質:**
     * **難易度: ${state.selectedDifficulty}** - ${difficultyInstruction}
+    * **文章の長さ: ${state.selectedTextLength}** - ${textLengthInstruction}
     * 質問（frontText）と答え（backText）は、PDFの主要な概念に基づいている必要があります。
     * 小学生や中学生にも理解できるような、やさしい言葉遣いを心がけてください。
 4.  **除外事項:** 学習に無関係な情報（例：ページ番号、著者名、日付）は含めないでください。
