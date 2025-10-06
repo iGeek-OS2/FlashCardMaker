@@ -99,3 +99,13 @@ body {
 .difficulty-btn:not(.active):hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
+
+/* Text Length Selector */
+.length-btn.active {
+    background-color: rgba(255, 255, 255, 0.25);
+    cursor: default;
+}
+.length-btn:not(.active):hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
