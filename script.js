@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const body = {
-            model: 'google/gemma-2-9b-it',
+            model: 'google/gemini-2.0-flash-exp:free',
             messages: messages,
         };
         if (expectJson) {
@@ -318,7 +318,7 @@ ${jsonTemplate}
     * **難易度: ${state.selectedDifficulty}** - ${difficultyInstruction}
     * **文章の長さ: ${state.selectedTextLength}** - ${textLengthInstruction}
     * 質問（frontText）と答え（backText）は、PDFの主要な概念に基づいている必要があります。
-    * 小学生や中学生にも理解できるような、やさしい言葉遣いを心がけてください。
+    * 授業に関係のない話題は絶対に含まないでください。参考資料に固執しないでください。
 5.  **除外事項:** 学習に無関係な情報（例：ページ番号、著者名、日付）は含めないでください。
 
 ### 【最終出力】
