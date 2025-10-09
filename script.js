@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const body = {
-            model: 'google/gemini-2.0-flash-exp:free',
+            model: 'google/gemma-3n-e2b-it:free',
             messages: messages,
         };
         if (expectJson) {
