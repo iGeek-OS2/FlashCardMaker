@@ -2,7 +2,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs
 
 document.addEventListener('DOMContentLoaded', () => {
    
-    const PROXY_SERVER_URL = 'https://flashmaker-api-proxy.dfg147147147.workers.dev'; 
+    const PROXY_SERVER_URL = 'flashmaker-api-proxy.dfg147147147.workers.dev'; // <!-- DEPLOY後に必ず書き換えてください -->
 
     // --- 状態管理 ---
     const state = {
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- AI API呼び出し (プロキシ経由) ---
     async function callProxyAPI(messages, expectJson = false) {
-        if (!PROXY_SERVER_URL || PROXY_SERVER_URL === 'https://flashmaker-api-proxy.dfg147147147.workers.dev') {
+        if (!PROXY_SERVER_URL || PROXY_SERVER_URL.includes('your-subdomain')) {
             showError('プロキシサーバーのURLが設定されていません。script.jsファイルを編集してください。');
             return null;
         }
@@ -224,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const body = {
-            model: 'google/gemma-3n-e2b-it:free',
             messages: messages,
         };
         if (expectJson) {
