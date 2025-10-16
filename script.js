@@ -238,12 +238,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (!response.ok) {
+                // レスポンスボディを一度だけテキストとして読み込む
+                const errorText = await response.text();
                 let errorMessage;
                 try {
-                    const errorData = await response.json();
+                    // テキストをJSONとして解析してみる
+                    const errorData = JSON.parse(errorText);
                     errorMessage = errorData.message || errorData.error || `HTTP error! status: ${response.status}`;
                 } catch (e) {
-                    errorMessage = await response.text() || `HTTP error! status: ${response.status}`;
+                    // 解析に失敗したら、テキストをそのままエラーメッセージとして使う
+                    errorMessage = errorText || `HTTP error! status: ${response.status}`;
                 }
                 throw new Error(errorMessage);
             }
@@ -531,3 +535,4 @@ ${jsonTemplate}
     // --- アプリケーション開始 ---
     init();
 });
+
