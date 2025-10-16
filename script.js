@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- AI API呼び出し (プロキシ経由) ---
     async function callProxyAPI(messages, expectJson = false) {
-        if (!PROXY_SERVER_URL || PROXY_SERVER_URL === 'https://flashmaker-proxy.workers.dev') {
+        if (!PROXY_SERVER_URL || PROXY_SERVER_URL === 'https://flashmaker-api-proxy.dfg147147147.workers.dev') {
             showError('プロキシサーバーのURLが設定されていません。script.jsファイルを編集してください。');
             return null;
         }
