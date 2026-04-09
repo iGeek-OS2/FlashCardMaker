@@ -2,7 +2,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs
 
 document.addEventListener('DOMContentLoaded', () => {
    
-    const PROXY_SERVER_URL = 'flashmaker-api-proxy.dfg147147147.workers.dev'; // <!-- DEPLOY後に必ず書き換えてください -->
+    const PROXY_SERVER_URL = 'https://flashmaker-api-proxy.dfg147147147.workers.dev'; // <!-- DEPLOY後に必ず書き換えてください -->
 
     // --- 状態管理 ---
     const state = {
